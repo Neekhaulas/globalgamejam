@@ -13,6 +13,7 @@ public class Horizon : MonoBehaviour
     public float SpeedWave;
     private WaveGenerator _waveGenerator;
     private EdgeCollider2D _edgeCollider2D;
+    public float TimeElapsed;
 
     // Use this for initialization
 	void Start ()
@@ -20,16 +21,7 @@ public class Horizon : MonoBehaviour
 	    _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
 	    _edgeCollider2D = GetComponent<EdgeCollider2D>();
         HorizonWavePoints = new List<WavePoint>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		HorizonGenerator();
-	    Delta += Time.deltaTime * SpeedWave;
-	}
 
-    public void HorizonGenerator()
-    {
         if (HorizonWavePoints == null)
         {
             HorizonWavePoints = new List<WavePoint>();
@@ -39,46 +31,54 @@ public class Horizon : MonoBehaviour
         {
             HorizonWavePoints.Add(_waveGenerator.GetWavePoint(i * Offset + Delta));
         }
-        Vector3[] vertices = new Vector3[(NumberPoints-1)*4];
-        int[] triangles = new int[(NumberPoints - 1) * 6];
-        Vector2[] uvs = new Vector2[(NumberPoints - 1) * 4];
+    }
+	
+	// Update is called once per frame
+	void Update () {
+		HorizonGenerator();
+	    Delta += Time.deltaTime * SpeedWave;
+	    TimeElapsed += Time.deltaTime;
+	    while (Delta >= Offset)
+	    {
+	        Delta = Delta - Offset;
+            HorizonWavePoints.RemoveAt(0);
+            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
+	    }
+	}
 
-        for (int i = 0; i < NumberPoints - 1; i++)
-        {
-            vertices[i * 4] = new Vector3(i * Offset, HorizonWavePoints[i].Height + MinHeight);
-            vertices[i * 4 + 1] = new Vector3((i + 1) * Offset, HorizonWavePoints[i + 1].Height + MinHeight);
-            vertices[i * 4 + 2] = new Vector3((i + 1) * Offset, 0);
-            vertices[i * 4 + 3] = new Vector3(i * Offset, 0);
-        }
-        
-        for (int i = 0; i < NumberPoints - 1; i++)
-        {
-            triangles[i * 6] = i;
-            triangles[i * 6 +1] = i+1;
-            triangles[i * 6 + 2] = i+2;
-            triangles[i * 6 + 3] = i;
-            triangles[i * 6 + 4] = i+2;
-            triangles[i * 6 + 5] = i+3;
-        }
+    public void HorizonGenerator()
+    {
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
 
-        for (int i = 0; i < NumberPoints - 1; i++)
+        for (int i = 0; i < NumberPoints; i++)
         {
-            uvs[i * 4] = new Vector2(0, 0);
-            uvs[i * 4 + 1] = new Vector2(1, 0);
-            uvs[i * 4 + 2] = new Vector2(1, 1);
-            uvs[i * 4 + 3] = new Vector2(0, 1);
+            vertices.Add(new Vector3(i * Offset - Delta, 0));
+            vertices.Add(new Vector3(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight));
+
+            if (vertices.Count >= 4)
+            {
+                // We have completed a new quad, create 2 triangles
+                int start = vertices.Count - 4;
+                triangles.Add(start + 0);
+                triangles.Add(start + 1);
+                triangles.Add(start + 2);
+                triangles.Add(start + 1);
+                triangles.Add(start + 3);
+                triangles.Add(start + 2);
+            }
         }
         
         Vector2[] edgePoints = new Vector2[NumberPoints];
         for (int i = 0; i < NumberPoints; i++)
         {
-            edgePoints[i] = new Vector2(i * Offset, HorizonWavePoints[i].Height + MinHeight);
+            edgePoints[i] = new Vector2(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight);
         }
         _edgeCollider2D.points = edgePoints;
 
         DestroyImmediate(Mesh);
         Mesh = new Mesh();
-        if (!transform.GetComponent<MeshFilter>() || !transform.GetComponent<MeshRenderer>()) //If you will havent got any meshrenderer or filter
+        if (!transform.GetComponent<MeshFilter>() || !transform.GetComponent<MeshRenderer>()) 
         {
             transform.gameObject.AddComponent<MeshFilter>();
             transform.gameObject.AddComponent<MeshRenderer>();
@@ -86,11 +86,11 @@ public class Horizon : MonoBehaviour
 
         transform.GetComponent<MeshFilter>().mesh = Mesh;
 
-        Mesh.name = "MyOwnObject";
+        Mesh.name = "Tidal";
 
-        Mesh.vertices = vertices; //Just do this... Use Logic...
-        Mesh.triangles = triangles;
-        Mesh.uv = uvs;
+        Mesh.vertices = vertices.ToArray();
+        Mesh.triangles = triangles.ToArray();
+        //Mesh.uv = uvs;
 
         Mesh.RecalculateNormals();
     }

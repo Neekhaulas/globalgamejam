@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class WaveGenerator : MonoBehaviour
 {
+    // the peak deviation of the function from zero.
     public WaveVariable Amplitude;
+
+    // the number of oscillations (cycles) that occur each second of time.
     public WaveVariable OrdinaryFrequency;
+
+    // specifies (in radians) where in its cycle the oscillation is at t = 0. 
     public WaveVariable Phase;
 
     private RandomGenerator _randomGenerator;

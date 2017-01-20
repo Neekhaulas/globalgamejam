@@ -8,13 +8,12 @@ public class Horizon : MonoBehaviour
     public int NumberPoints;
     public float Offset;
     public Mesh Mesh;
+    private WaveGenerator _waveGenerator;
     // Use this for initialization
-	void Start () {
+	void Start ()
+	{
+	    _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
         HorizonWavePoints = new List<WavePoint>();
-        for (int i = 0; i < NumberPoints; i++)
-	    {
-	        HorizonWavePoints.Add(new WavePoint(10));
-	    }
 	}
 	
 	// Update is called once per frame
@@ -24,6 +23,15 @@ public class Horizon : MonoBehaviour
 
     public void HorizonGenerator()
     {
+        if (HorizonWavePoints == null)
+        {
+            HorizonWavePoints = new List<WavePoint>();
+        }
+        HorizonWavePoints.Clear();
+        for (int i = 0; i < NumberPoints; i++)
+        {
+            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(i * Offset));
+        }
         Vector3[] vertices = new Vector3[(NumberPoints-1)*4];
         int[] triangles = new int[(NumberPoints - 1) * 6];
         Vector2[] uvs = new Vector2[(NumberPoints - 1) * 4];

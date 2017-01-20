@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class WaveGenerator : MonoBehaviour
 {
-    public float Amplitude;
-    public float OrdinaryFrequency;
-    public float Phase;
+    public WaveVariable Amplitude;
+    public WaveVariable OrdinaryFrequency;
+    public WaveVariable Phase;
 
     private RandomGenerator _randomGenerator;
 
     private float angularFrequency
     {
-        get { return 2 * (float)Math.PI * OrdinaryFrequency; }
+        get { return 2 * (float)Math.PI * OrdinaryFrequency.Value; }
     }
 
     void Awake()
@@ -33,7 +33,7 @@ public class WaveGenerator : MonoBehaviour
 
     private float GetHeight(float time)
     {
-        return Amplitude * Mathf.Sin(angularFrequency * time + Phase);
+        return Amplitude.Value * Mathf.Sin(angularFrequency * time + Phase.Value);
     }
 
     public WavePoint GetWavePoint(float time)

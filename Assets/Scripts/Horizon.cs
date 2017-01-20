@@ -8,6 +8,7 @@ public class Horizon : MonoBehaviour
     public int NumberPoints;
     public float Offset;
     public Mesh Mesh;
+    public float MinHeight;
     private WaveGenerator _waveGenerator;
     // Use this for initialization
 	void Start ()
@@ -38,8 +39,8 @@ public class Horizon : MonoBehaviour
 
         for (int i = 0; i < NumberPoints - 1; i++)
         {
-            vertices[i * 4] = new Vector3(i * Offset, HorizonWavePoints[i].Height);
-            vertices[i * 4 + 1] = new Vector3((i + 1) * Offset, HorizonWavePoints[i + 1].Height);
+            vertices[i * 4] = new Vector3(i * Offset, HorizonWavePoints[i].Height + MinHeight);
+            vertices[i * 4 + 1] = new Vector3((i + 1) * Offset, HorizonWavePoints[i + 1].Height + MinHeight);
             vertices[i * 4 + 2] = new Vector3((i + 1) * Offset, 0);
             vertices[i * 4 + 3] = new Vector3(i * Offset, 0);
         }

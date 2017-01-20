@@ -29,7 +29,7 @@ public class Horizon : MonoBehaviour
         HorizonWavePoints.Clear();
         for (int i = 0; i < NumberPoints; i++)
         {
-            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(i * Offset + Delta));
+            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(0));
         }
     }
 	

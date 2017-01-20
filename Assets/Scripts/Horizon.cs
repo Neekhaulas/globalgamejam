@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Horizon : MonoBehaviour
 {
-    public List<WavePoint> HorziontWavePoints;
+    public List<WavePoint> HorizonWavePoints;
     public int NumberPoints;
     public float Offset;
     public Mesh Mesh;
     // Use this for initialization
 	void Start () {
-        HorziontWavePoints = new List<WavePoint>();
-        for (int i = 0; i < 10; i++)
+        HorizonWavePoints = new List<WavePoint>();
+        for (int i = 0; i < NumberPoints; i++)
 	    {
-	        HorziontWavePoints.Add(new WavePoint(NumberPoints));
+	        HorizonWavePoints.Add(new WavePoint(10));
 	    }
 	}
 	
@@ -30,28 +30,28 @@ public class Horizon : MonoBehaviour
 
         for (int i = 0; i < NumberPoints - 1; i++)
         {
-            vertices[i * 4] = new Vector3(i * Offset, HorziontWavePoints[i].Height);
-            vertices[i * 4 + 1] = new Vector3((i + 1) * Offset, HorziontWavePoints[i + 1].Height);
+            vertices[i * 4] = new Vector3(i * Offset, HorizonWavePoints[i].Height);
+            vertices[i * 4 + 1] = new Vector3((i + 1) * Offset, HorizonWavePoints[i + 1].Height);
             vertices[i * 4 + 2] = new Vector3((i + 1) * Offset, 0);
             vertices[i * 4 + 3] = new Vector3(i * Offset, 0);
         }
         
         for (int i = 0; i < NumberPoints - 1; i++)
         {
-            triangles[i] = i;
-            triangles[i+1] = i+1;
-            triangles[i+2] = i+2;
-            triangles[i+3] = i;
-            triangles[i+4] = i+2;
-            triangles[i+5] = i+3;
+            triangles[i * 6] = i;
+            triangles[i * 6 +1] = i+1;
+            triangles[i * 6 + 2] = i+2;
+            triangles[i * 6 + 3] = i;
+            triangles[i * 6 + 4] = i+2;
+            triangles[i * 6 + 5] = i+3;
         }
 
         for (int i = 0; i < NumberPoints - 1; i++)
         {
-            uvs[i] = new Vector2(0, 0);
-            uvs[i+1] = new Vector2(1, 0);
-            uvs[i+2] = new Vector2(1, 1);
-            uvs[i+3] = new Vector2(0, 1);
+            uvs[i * 4] = new Vector2(0, 0);
+            uvs[i * 4 + 1] = new Vector2(1, 0);
+            uvs[i * 4 + 2] = new Vector2(1, 1);
+            uvs[i * 4 + 3] = new Vector2(0, 1);
         }
 
         Mesh = new Mesh();

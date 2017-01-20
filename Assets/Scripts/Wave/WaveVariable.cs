@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class WaveVariable
 {
-    [Range(0, 5)]
+    [Range(-5, 5)]
     public float Value;
     /*
     public Vector2 Limits;

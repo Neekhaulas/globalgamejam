@@ -9,17 +9,23 @@ public class Horizon : MonoBehaviour
     public float Offset;
     public Mesh Mesh;
     public float MinHeight;
+    public float Delta;
+    public float SpeedWave;
     private WaveGenerator _waveGenerator;
+    private EdgeCollider2D _edgeCollider2D;
+
     // Use this for initialization
 	void Start ()
 	{
 	    _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
+	    _edgeCollider2D = GetComponent<EdgeCollider2D>();
         HorizonWavePoints = new List<WavePoint>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		HorizonGenerator();
+	    Delta += Time.deltaTime * SpeedWave;
 	}
 
     public void HorizonGenerator()
@@ -31,7 +37,7 @@ public class Horizon : MonoBehaviour
         HorizonWavePoints.Clear();
         for (int i = 0; i < NumberPoints; i++)
         {
-            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(i * Offset));
+            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(i * Offset + Delta));
         }
         Vector3[] vertices = new Vector3[(NumberPoints-1)*4];
         int[] triangles = new int[(NumberPoints - 1) * 6];
@@ -62,7 +68,15 @@ public class Horizon : MonoBehaviour
             uvs[i * 4 + 2] = new Vector2(1, 1);
             uvs[i * 4 + 3] = new Vector2(0, 1);
         }
+        
+        Vector2[] edgePoints = new Vector2[NumberPoints];
+        for (int i = 0; i < NumberPoints; i++)
+        {
+            edgePoints[i] = new Vector2(i * Offset, HorizonWavePoints[i].Height + MinHeight);
+        }
+        _edgeCollider2D.points = edgePoints;
 
+        DestroyImmediate(Mesh);
         Mesh = new Mesh();
         if (!transform.GetComponent<MeshFilter>() || !transform.GetComponent<MeshRenderer>()) //If you will havent got any meshrenderer or filter
         {

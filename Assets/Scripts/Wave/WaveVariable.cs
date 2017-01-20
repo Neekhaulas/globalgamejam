@@ -51,7 +51,7 @@ public class WaveVariable
     {
         int percent = random.NextInt(100);
 
-        if (percent < currentChanceToChange)
+        if (percent < currentChanceToChange || Value < ValueLimits.x || Value > ValueLimits.y)
         {
             Direction *= -1;
 

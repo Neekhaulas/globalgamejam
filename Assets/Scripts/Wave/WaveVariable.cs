@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,148 +11,57 @@ public class WaveVariable
     [Range(-5, 5)]
     public float Value;
 
+    public Vector2 ValueLimits;
+
     public float Speed;
 
-    public Vector2 Limits;
+    public float TimeToReachTheMaxValue;
 
-    public float MinForceTime;
+    public int Direction;
 
-    public float MaxTime;
+    public float ChanceAcceleration;
 
-    private float average
-    {
-        get { return (Limits.x + Limits.y) / 2; }
-    }
+    private int _targetValue;
 
-    private bool isForced
-    {
-        get { return _forceChangementTime > 0; }
-    }
-
-    public float Acceleration;
-
-    public float AccelerationStep;
-
-    private float _timeMaxUntilNextChange;
-
-    private float _forceChangementTime;
+    private float currentChanceToChange;
 
     public WaveVariable()
     {
-        _timeMaxUntilNextChange = MaxTime;
-        _forceChangementTime = -1;
+        _targetValue = 0;
+        Direction = 1;
     }
 
     public void Actualize(float time, RandomGenerator randomGenerator)
     {
-        ActualizeTimes(time);
-
         ActualizeValues(time);
 
-        if (Clamp(ref Value, Limits))
-        {
-            ForceChangement();
-        }
-
-        if (!isForced)
-        {
-            if (HasToChangeDirection(randomGenerator))
-            {
-                ChangeDirection();
-            }
-        }
-
-        if (Clamp(ref Acceleration, new Vector2(-3, 3)))
-        {
-            // nothing ? 
-        }
-
-        if (Clamp(ref Speed, new Vector2(-Limits.y/3, Limits.y/3)))
-        {
-            // nothing ?
-        }
+        ChangeDirection(randomGenerator);
     }
 
     private void ActualizeValues(float time)
     {
-        Value += time * Speed;
+        Value += time * Speed * Direction;
 
-        Speed *= Acceleration;
+        Speed = Math.Abs((ValueLimits[_targetValue] - Value) / TimeToReachTheMaxValue);
 
-        Acceleration += AccelerationStep * time;
-
-        ActualizeAccelerationStep();
+        currentChanceToChange += time * ChanceAcceleration;
     }
-
-    private void ActualizeAccelerationStep()
-    {
-        if (isForced)
-        {
-            
-        }
-        else
-        {
-            float distToMax = Limits.y - Value;
-
-            distToMax = Normalize(distToMax, Limits.y - Limits.x);
-
-            distToMax *= 2;
-
-            distToMax -= 1;
-
-            AccelerationStep = distToMax;
-        }
-    }
-
-    private bool HasToChangeDirection(RandomGenerator randomGenerator)
-    {
-        float randomFloat = randomGenerator.NextFloat();
-
-        return randomFloat > Normalize(_timeMaxUntilNextChange, MaxTime);
-    }
-
-    private void ActualizeTimes(float time)
-    {
-        _timeMaxUntilNextChange -= time;
-        _forceChangementTime -= time;
-    }
-
-    private void ForceChangement()
-    {
-        ChangeDirection();
-        _forceChangementTime = MinForceTime;
-    }
-
-    private float Normalize(float value, float MaxValue = float.MaxValue)
-    {
-        return Math.Abs(value / MaxValue);
-    }
-
-    private bool Clamp(ref float value, Vector2 limits)
-    {
-        if (value < limits.x)
-        {
-            value = limits.x;
-            return true;
-        }
-
-        if (value > limits.y)
-        {
-            value = limits.y;
-            return true;
-        }
-
-        return false;
-    }
-
  
-    private void ChangeDirection()
+    private void ChangeDirection(RandomGenerator random)
     {
-        Acceleration = -Math.Sign(Acceleration);
-        AccelerationStep = Math.Sign(Acceleration);
+        int percent = random.NextInt(100);
 
-        _timeMaxUntilNextChange = MaxTime;
-        _forceChangementTime = -1;
+        if (percent < currentChanceToChange)
+        {
+            Direction *= -1;
+
+            _targetValue++;
+
+            if (_targetValue == 2)
+                _targetValue = 0;
+
+            currentChanceToChange = 0;
+        }
     }
 }
 

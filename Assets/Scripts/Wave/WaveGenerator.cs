@@ -34,8 +34,8 @@ public class WaveGenerator : MonoBehaviour
 	// Update is called once per frame  
 	void Update () {
 		Amplitude.Actualize(Time.deltaTime, _randomGenerator);
-		//OrdinaryFrequency.Actualize(Time.deltaTime, _randomGenerator);
-		//Phase.Actualize(Time.deltaTime, _randomGenerator);
+		OrdinaryFrequency.Actualize(Time.deltaTime, _randomGenerator);
+		Phase.Actualize(Time.deltaTime, _randomGenerator);
 	}
 
     private float GetHeight(float time)

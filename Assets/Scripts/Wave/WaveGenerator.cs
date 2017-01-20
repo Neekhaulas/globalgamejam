@@ -9,9 +9,16 @@ public class WaveGenerator : MonoBehaviour
     public float OrdinaryFrequency;
     public float Phase;
 
+    private RandomGenerator _randomGenerator;
+
     private float angularFrequency
     {
         get { return 2 * (float)Math.PI * OrdinaryFrequency; }
+    }
+
+    void Awake()
+    {
+        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
     }
 
 	// Use this for initialization
@@ -19,7 +26,7 @@ public class WaveGenerator : MonoBehaviour
 		
 	}
 	
-	// Update is called once per frame
+	// Update is called once per frame  
 	void Update () {
 		
 	}

@@ -45,11 +45,6 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void RecoverShipWrecked(ShipWrecked shipWrecked)
-    {
-        shipWrecked.SetIsRecovered(true);
-    }
-
     public void AddCharacter()
     {
         Vector3 positionSpawn = transform.position;

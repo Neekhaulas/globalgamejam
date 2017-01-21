@@ -17,11 +17,33 @@ public class Horizon : MonoBehaviour
     private PolygonCollider2D _polygonCollider2D;
     public float TimeElapsed;
 
+    public Vector2 SpawnPosition
+    {
+        get
+        {
+            return new Vector2(Offset * HorizonWavePoints.Count,
+                HorizonWavePoints.Last().Height + minDist);
+        }
+    }
+
+    public WavePoint Last
+    {
+        get
+        {
+            return HorizonWavePoints.Last();
+        }
+    }
+
+    private float minDist
+    {
+        get { return 50; }
+    }
+
     // Use this for initialization
-	void Start ()
-	{
-	    _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
-	    _polygonCollider2D = GetComponent<PolygonCollider2D>();
+    void Start()
+    {
+        _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
+        _polygonCollider2D = GetComponent<PolygonCollider2D>();
         HorizonWavePoints = new List<WavePoint>();
 
         if (HorizonWavePoints == null)
@@ -34,40 +56,47 @@ public class Horizon : MonoBehaviour
             HorizonWavePoints.Add(_waveGenerator.GetWavePoint(0));
         }
     }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		HorizonGenerator();
 
-	    float oldDelta = Delta;
-	    Delta += Time.fixedDeltaTime * SpeedWave;
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        HorizonGenerator();
 
-	    int nbPointToGenerate = 0;
-	    WavePoint pointOnHold = null;
+        float oldDelta = Delta;
+        Delta += Time.fixedDeltaTime * SpeedWave;
+
+        int nbPointToGenerate = 0;
+        WavePoint pointOnHold = null;
 
         while (Delta >= Offset)
-	    {
-	        Delta = Delta - Offset;
-	        nbPointToGenerate++;
-	        //pointOnHold = _waveGenerator.GetWavePoint(TimeElapsed);
+        {
+            Delta = Delta - Offset;
+            nbPointToGenerate++;
+            //pointOnHold = _waveGenerator.GetWavePoint(TimeElapsed);
+        }
 
-	    }
+        float deltaTime = Time.fixedDeltaTime / nbPointToGenerate;
 
-	    float deltaTime = Time.fixedDeltaTime / nbPointToGenerate;
-
-	    if (nbPointToGenerate > 0)
-	    {
-	        for (int i = 0; i < nbPointToGenerate; i++)
-	        {
+        if (nbPointToGenerate > 0)
+        {
+            for (int i = 0; i < nbPointToGenerate; i++)
+            {
+                HorizonWavePoints[0].IndexInTheList = -1;
                 HorizonWavePoints.RemoveAt(0);
-	            TimeElapsed += deltaTime;
-	            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
-	        }
-	    }
-	    else
-	    {
-	        TimeElapsed += Time.fixedDeltaTime;
-	    }
+                TimeElapsed += deltaTime;
+                HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
+            }
+        }
+        else
+        {
+            TimeElapsed += Time.fixedDeltaTime;
+        }
+
+        // because i'm lazy, actualize the index at each frame
+        for (int i = 0; i < HorizonWavePoints.Count; i++)
+        {
+            HorizonWavePoints[i].IndexInTheList = i;
+        }
     }
 
     public void HorizonGenerator()
@@ -93,19 +122,19 @@ public class Horizon : MonoBehaviour
             }
         }
 
-        Vector2[] edgePoints = new Vector2[NumberPoints+2];
+        Vector2[] edgePoints = new Vector2[NumberPoints + 2];
         for (int i = 0; i < NumberPoints; i++)
         {
             edgePoints[i] = new Vector2(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight);
         }
         edgePoints[NumberPoints] = new Vector2(NumberPoints * Offset, 0);
-        edgePoints[NumberPoints+1] = new Vector2(0, 0);
-        
+        edgePoints[NumberPoints + 1] = new Vector2(0, 0);
+
         _polygonCollider2D.points = edgePoints;
 
         DestroyImmediate(Mesh);
         Mesh = new Mesh();
-        if (!transform.GetComponent<MeshFilter>() || !transform.GetComponent<MeshRenderer>()) 
+        if (!transform.GetComponent<MeshFilter>() || !transform.GetComponent<MeshRenderer>())
         {
             transform.gameObject.AddComponent<MeshFilter>();
             transform.gameObject.AddComponent<MeshRenderer>();
@@ -120,5 +149,11 @@ public class Horizon : MonoBehaviour
         //Mesh.uv = uvs;
 
         Mesh.RecalculateNormals();
+    }
+
+    public Vector2 GetPosition(int indexWavePoint)
+    {
+        return new Vector2(Delta + Offset * indexWavePoint,
+            HorizonWavePoints[indexWavePoint].Height + MinHeight);
     }
 }

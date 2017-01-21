@@ -6,6 +6,11 @@ using UnityEngine;
 
 public class ShipWrecked : MonoBehaviour
 {
-    // todo
+    public WavePoint TargetPosition;
+
+    public void UpdatePosition(Horizon horizon)
+    {
+        gameObject.transform.position = horizon.GetPosition(TargetPosition.IndexInTheList);
+    }
 }
 

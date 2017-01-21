@@ -23,13 +23,13 @@ public class WaveGenerator : MonoBehaviour
 
     void Awake()
     {
-        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
+        
     }
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
+    }
 	    
 	// Update is called once per frame  
 	void Update () {

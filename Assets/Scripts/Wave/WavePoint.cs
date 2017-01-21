@@ -8,6 +8,8 @@ public class WavePoint
 {
     public float Height;
 
+    public int IndexInTheList;
+
     public WavePoint()
         : this(0)
     { }

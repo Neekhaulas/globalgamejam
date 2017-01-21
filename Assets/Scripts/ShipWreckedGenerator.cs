@@ -12,12 +12,25 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private float _currentTimeUntilSpawn;
     private RandomGenerator _randomGenerator;
+    private Horizon _horizon;
+
+    private bool IsTimeToSpawn
+    {
+        get
+        {
+            return _currentTimeUntilSpawn < 0 && !ShipWreckedBuffer.isActiveAndEnabled;
+        }
+    }
 
     private void Awake()
     {
-        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
-
         ShipWreckedBuffer.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
+        _horizon = GameObject.FindGameObjectWithTag("Horizon").GetComponent<Horizon>();
 
         SetNewTime();
     }
@@ -26,11 +39,25 @@ public class ShipWreckedGenerator : MonoBehaviour
     {
         _currentTimeUntilSpawn -= Time.deltaTime;
 
-        if (_currentTimeUntilSpawn < 0)
+        if (ShipWreckedBuffer.TargetPosition.IndexInTheList == -1)
+        {
+            DisableShipWrecked();
+        }
+
+        if (IsTimeToSpawn)
         {
             Spawn();
-            SetNewTime();
         }
+
+        if (ShipWreckedBuffer.isActiveAndEnabled)
+        {
+            ActualizePosition();
+        }
+    }
+
+    private void ActualizePosition()
+    {
+        ShipWreckedBuffer.UpdatePosition(_horizon);
     }
 
     private void SetNewTime()
@@ -40,7 +67,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private void Spawn()
     {
-        if (!ShipWreckedBuffer.gameObject.activeSelf)
+        if (!ShipWreckedBuffer.gameObject.active)
         {
             ActivateShipWrecked();
         }
@@ -48,7 +75,13 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private void ActivateShipWrecked()
     {
+        ShipWreckedBuffer.TargetPosition = _horizon.Last;
         ShipWreckedBuffer.gameObject.SetActive(true);
-        //ShipWreckedBuffer.transform.position = 
+    }
+
+    private void DisableShipWrecked()
+    {
+        ShipWreckedBuffer.gameObject.SetActive(false);
+        SetNewTime();
     }
 }

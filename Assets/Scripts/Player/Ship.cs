@@ -45,6 +45,6 @@ public class Ship : MonoBehaviour
 
     public void AddCharacter()
     {
-        // todo
+        Debug.Log("Add Character");
     }
 }

@@ -19,12 +19,15 @@ public class ShipWreckedRecover : MonoBehaviour
     {
         if (other.gameObject.tag == "ShipWrecked")
         {
-            Debug.Log("Recover");
+            ShipWrecked shipWrecked = other.gameObject.GetComponent<ShipWrecked>();
+
+            shipWrecked.SetIsRecovered(true);
+            shipWrecked.SetTarget(transform, this);
         }
     }
 
     public void AddCharacter()
     {
-        // todo
+        _ship.AddCharacter();
     }
 }

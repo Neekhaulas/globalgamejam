@@ -7,12 +7,14 @@ using UnityEngine;
 public class ShipWrecked : MonoBehaviour
 {
     public float RotateSpeed;
+    public float TranslationSpeed;
 
     public WavePoint TargetPosition;
 
     private bool _isRecovered = false;
     private Transform _target;
-    private bool _isOnTheShip = false;
+
+    private ShipWreckedRecover _bufferRecover;
 
     public void UpdatePosition(Horizon horizon)
     {
@@ -31,8 +33,9 @@ public class ShipWrecked : MonoBehaviour
         _isRecovered = state;
     }
 
-    public void SetTarget(Transform transform)
+    public void SetTarget(Transform transform, ShipWreckedRecover recover)
     {
+        _bufferRecover = recover;
         _target = transform;
     }
 
@@ -41,13 +44,19 @@ public class ShipWrecked : MonoBehaviour
         if (_isRecovered)
         {
             transform.Rotate(new Vector3(0, 0, 1), RotateSpeed * Time.deltaTime);
+
+            Vector2 direction = _target.position - transform.position;
+            direction.Normalize(); 
+
+            transform.Translate(direction * TranslationSpeed);
+
+            if (transform.position.x < _target.position.x)
+            {
+                transform.position = _target.position;
+                _bufferRecover.AddCharacter();
+                _isRecovered = false;
+                gameObject.SetActive(false);
+            }
         }
-
-        // todo target update
-    }
-
-    public bool IsOnTheShip()
-    {
-        return _isOnTheShip;
     }
 }

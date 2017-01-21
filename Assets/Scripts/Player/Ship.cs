@@ -9,6 +9,9 @@ public class Ship : MonoBehaviour
 {
     public float Height;
     public GameObject Water;
+
+    public Transform RecoverPoint;
+
     private Rigidbody2D _rigidbody2D;
     private float _startPosition;
 
@@ -32,5 +35,10 @@ public class Ship : MonoBehaviour
             _rigidbody2D.MovePosition(positionToMove);
             transform.position = positionToMove;
         }
+    }
+
+    public void RecoverShipWrecked(ShipWrecked shipWrecked)
+    {
+        shipWrecked.SetIsRecovered(true);
     }
 }

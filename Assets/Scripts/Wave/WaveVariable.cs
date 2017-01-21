@@ -15,6 +15,8 @@ public class WaveVariable
 
     public float Speed;
 
+    public Vector2 SpeedLimits;
+
     public float TimeToReachTheMaxValue;
 
     public int Direction;
@@ -44,9 +46,26 @@ public class WaveVariable
 
         Speed = Math.Abs((ValueLimits[_targetValue] - Value) / TimeToReachTheMaxValue);
 
+        Speed = Clamp(Speed, SpeedLimits);
+
         currentChanceToChange += time * ChanceAcceleration;
     }
- 
+
+    private float Clamp(float value, Vector2 limits)
+    {
+        if (value < limits.x)
+        {
+            value = limits.x;
+        }
+
+        else if (value > limits.y)
+        {
+            value = limits.y;
+        }
+
+        return value;
+    }
+
     private void TryToChangeDirection(RandomGenerator random)
     {
         int percent = random.NextInt(100);

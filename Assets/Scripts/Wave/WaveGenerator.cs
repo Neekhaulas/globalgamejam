@@ -12,7 +12,7 @@ public class WaveGenerator : MonoBehaviour
     public WaveVariable OrdinaryFrequency;
 
     // specifies (in radians) where in its cycle the oscillation is at t = 0. 
-    public WaveVariable Phase;
+    //public WaveVariable Phase;
 
     private RandomGenerator _randomGenerator;
 
@@ -40,7 +40,8 @@ public class WaveGenerator : MonoBehaviour
 
     private float GetHeight(float time)
     {
-        return Amplitude.Value * Mathf.Sin(angularFrequency * time + Phase.Value);
+        //return Amplitude.Value * Mathf.Sin(angularFrequency * time + Phase.Value);
+        return Amplitude.Value * Mathf.Sin(angularFrequency * time);
     }
 
     public WavePoint GetWavePoint(float time)

@@ -35,7 +35,7 @@ public class WaveGenerator : MonoBehaviour
 	void Update () {
 		Amplitude.Actualize(Time.deltaTime, _randomGenerator);
 		OrdinaryFrequency.Actualize(Time.deltaTime, _randomGenerator);
-		Phase.Actualize(Time.deltaTime, _randomGenerator);
+		//Phase.Actualize(Time.deltaTime, _randomGenerator);
 	}
 
     private float GetHeight(float time)

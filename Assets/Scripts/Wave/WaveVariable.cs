@@ -27,7 +27,7 @@ public class WaveVariable
 
     public WaveVariable()
     {
-        _targetValue = 0;
+        _targetValue = 1;
         Direction = 1;
     }
 
@@ -35,7 +35,7 @@ public class WaveVariable
     {
         ActualizeValues(time);
 
-        ChangeDirection(randomGenerator);
+        TryToChangeDirection(randomGenerator);
     }
 
     private void ActualizeValues(float time)
@@ -47,21 +47,37 @@ public class WaveVariable
         currentChanceToChange += time * ChanceAcceleration;
     }
  
-    private void ChangeDirection(RandomGenerator random)
+    private void TryToChangeDirection(RandomGenerator random)
     {
         int percent = random.NextInt(100);
 
-        if (percent < currentChanceToChange || Value < ValueLimits.x || Value > ValueLimits.y)
+        if(Value < ValueLimits.x)
         {
-            Direction *= -1;
-
-            _targetValue++;
-
-            if (_targetValue == 2)
-                _targetValue = 0;
-
-            currentChanceToChange = 0;
+            Value = ValueLimits.x;
+            ChangeDirection();
         }
+        else if (Value > ValueLimits.y)
+        {
+            Value = ValueLimits.y;
+            ChangeDirection();
+        }
+        else if (percent < currentChanceToChange )
+        {
+            ChangeDirection();
+        }
+    }
+
+    private void ChangeDirection()
+    {
+        Direction *= -1;
+
+        _targetValue++;
+
+        if (_targetValue == 2)
+            _targetValue = 0;
+
+        currentChanceToChange = 0;
+
     }
 }
 

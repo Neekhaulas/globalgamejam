@@ -34,10 +34,10 @@ public class Horizon : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		HorizonGenerator();
-	    Delta += Time.deltaTime * SpeedWave;
-	    TimeElapsed += Time.deltaTime;
+	    Delta += Time.fixedDeltaTime * SpeedWave;
+	    TimeElapsed += Time.fixedDeltaTime;
 	    while (Delta >= Offset)
 	    {
 	        Delta = Delta - Offset;

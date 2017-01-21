@@ -22,4 +22,9 @@ public class ShipWreckedRecover : MonoBehaviour
             Debug.Log("Recover");
         }
     }
+
+    public void AddCharacter()
+    {
+        // todo
+    }
 }

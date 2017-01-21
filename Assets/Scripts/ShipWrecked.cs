@@ -11,6 +11,8 @@ public class ShipWrecked : MonoBehaviour
     public WavePoint TargetPosition;
 
     private bool _isRecovered = false;
+    private Transform _target;
+    private bool _isOnTheShip = false;
 
     public void UpdatePosition(Horizon horizon)
     {
@@ -29,12 +31,23 @@ public class ShipWrecked : MonoBehaviour
         _isRecovered = state;
     }
 
+    public void SetTarget(Transform transform)
+    {
+        _target = transform;
+    }
+
     private void Update()
     {
         if (_isRecovered)
         {
             transform.Rotate(new Vector3(0, 0, 1), RotateSpeed * Time.deltaTime);
         }
+
+        // todo target update
+    }
+
+    public bool IsOnTheShip()
+    {
+        return _isOnTheShip;
     }
 }
-

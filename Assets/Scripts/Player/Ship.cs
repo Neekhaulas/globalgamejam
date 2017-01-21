@@ -10,6 +10,7 @@ public class Ship : MonoBehaviour
     public float Height;
     public GameObject Water;
     public float SinkAngle = 90f;
+    public Transform RecoverPoint;
     private Rigidbody2D _rigidbody2D;
     private float _startPosition;
 
@@ -26,6 +27,7 @@ public class Ship : MonoBehaviour
         position.y = 200;
         position.x = _startPosition;
         RaycastHit2D hit = Physics2D.Raycast(position, Vector2.down, 500f, LayerMask.GetMask("Water"));
+
         if (hit)
         {
             Vector2 positionToMove = hit.point;
@@ -40,5 +42,15 @@ public class Ship : MonoBehaviour
             _rigidbody2D.constraints = RigidbodyConstraints2D.None;
             enabled = false;
         }
+    }
+
+    public void RecoverShipWrecked(ShipWrecked shipWrecked)
+    {
+        shipWrecked.SetIsRecovered(true);
+    }
+
+    public void AddCharacter()
+    {
+        // todo
     }
 }

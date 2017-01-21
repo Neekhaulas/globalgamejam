@@ -16,10 +16,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private bool IsTimeToSpawn
     {
-        get
-        {
-            return _currentTimeUntilSpawn < 0 && !ShipWreckedBuffer.isActiveAndEnabled;
-        }
+        get { return _currentTimeUntilSpawn < 0 && !ShipWreckedBuffer.isActiveAndEnabled; }
     }
 
     private void Awake()
@@ -39,7 +36,8 @@ public class ShipWreckedGenerator : MonoBehaviour
     {
         _currentTimeUntilSpawn -= Time.deltaTime;
 
-        if (ShipWreckedBuffer.TargetPosition.IndexInTheList == -1)
+        if (ShipWreckedBuffer.TargetPosition.IndexInTheList == -1
+            && ShipWreckedBuffer.isActiveAndEnabled)
         {
             DisableShipWrecked();
         }
@@ -48,16 +46,21 @@ public class ShipWreckedGenerator : MonoBehaviour
         {
             Spawn();
         }
-
-        if (ShipWreckedBuffer.isActiveAndEnabled)
-        {
-            ActualizePosition();
-        }
     }
 
     private void ActualizePosition()
     {
         ShipWreckedBuffer.UpdatePosition(_horizon);
+    }
+
+    public void TryToActualizeShipWrecked()
+    {
+        if (ShipWreckedBuffer.isActiveAndEnabled
+            && ShipWreckedBuffer.TargetPosition.IndexInTheList != -1)
+        {
+            ActualizePosition();
+
+        }
     }
 
     private void SetNewTime()
@@ -67,7 +70,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private void Spawn()
     {
-        if (!ShipWreckedBuffer.gameObject.active)
+        if (!ShipWreckedBuffer.isActiveAndEnabled)
         {
             ActivateShipWrecked();
         }

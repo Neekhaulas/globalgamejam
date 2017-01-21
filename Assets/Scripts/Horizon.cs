@@ -17,6 +17,8 @@ public class Horizon : MonoBehaviour
     private PolygonCollider2D _polygonCollider2D;
     public float TimeElapsed;
 
+    private ShipWreckedGenerator _shipWreckedGenerator;
+
     public Vector2 SpawnPosition
     {
         get
@@ -43,6 +45,10 @@ public class Horizon : MonoBehaviour
     void Start()
     {
         _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
+
+        _shipWreckedGenerator =
+            GameObject.FindGameObjectWithTag("ShipWreckedGenerator").GetComponent<ShipWreckedGenerator>();
+
         _polygonCollider2D = GetComponent<PolygonCollider2D>();
         HorizonWavePoints = new List<WavePoint>();
 
@@ -97,6 +103,8 @@ public class Horizon : MonoBehaviour
         {
             HorizonWavePoints[i].IndexInTheList = i;
         }
+
+        _shipWreckedGenerator.TryToActualizeShipWrecked();
     }
 
     public void HorizonGenerator()
@@ -153,7 +161,7 @@ public class Horizon : MonoBehaviour
 
     public Vector2 GetPosition(int indexWavePoint)
     {
-        return new Vector2(Delta + Offset * indexWavePoint,
+        return new Vector2(Offset * indexWavePoint - Delta,
             HorizonWavePoints[indexWavePoint].Height + MinHeight);
     }
 }

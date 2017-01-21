@@ -48,6 +48,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private void ActivateShipWrecked()
     {
-        
+        ShipWreckedBuffer.gameObject.SetActive(true);
+        //ShipWreckedBuffer.transform.position = 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Horizon : MonoBehaviour
@@ -38,12 +39,35 @@ public class Horizon : MonoBehaviour
 		HorizonGenerator();
 	    Delta += Time.fixedDeltaTime * SpeedWave;
 	    TimeElapsed += Time.fixedDeltaTime;
-	    while (Delta >= Offset)
+
+	    int nbPointToGenerate = 0;
+	    WavePoint pointOnHold = null;
+
+        while (Delta >= Offset)
 	    {
 	        Delta = Delta - Offset;
-            HorizonWavePoints.RemoveAt(0);
-            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
+	        nbPointToGenerate++;
+	        pointOnHold = _waveGenerator.GetWavePoint(TimeElapsed);
+
 	    }
+
+	    if (nbPointToGenerate > 0)
+	    {
+            WavePoint lastPoint = HorizonWavePoints.Last();
+
+	        for (int i = 0; i < nbPointToGenerate; i++)
+	        {
+                HorizonWavePoints.RemoveAt(0);
+            }
+
+	        float height = lastPoint.Height;
+
+	        for (int i = 0; i < nbPointToGenerate; i++)
+	        {
+	            height += (pointOnHold.Height - lastPoint.Height)/nbPointToGenerate;    
+	            HorizonWavePoints.Add(new WavePoint(height));
+	        }
+        }
 	}
 
     public void HorizonGenerator()

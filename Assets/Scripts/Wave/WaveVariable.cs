@@ -25,7 +25,9 @@ public class WaveVariable
 
     private int _targetValue;
 
-    private float currentChanceToChange;
+    public float CurrentChanceToChange;
+
+    public float Percent;
 
     public WaveVariable()
     {
@@ -48,7 +50,7 @@ public class WaveVariable
 
         Speed = Clamp(Speed, SpeedLimits);
 
-        currentChanceToChange += time * ChanceAcceleration;
+        CurrentChanceToChange += time * ChanceAcceleration;
     }
 
     private float Clamp(float value, Vector2 limits)
@@ -68,25 +70,28 @@ public class WaveVariable
 
     private void TryToChangeDirection(RandomGenerator random)
     {
-        int percent = random.NextInt(100);
-
         if(Value < ValueLimits.x)
         {
             Value = ValueLimits.x;
-            ChangeDirection();
+            ChangeDirection(random);
         }
         else if (Value > ValueLimits.y)
         {
             Value = ValueLimits.y;
-            ChangeDirection();
+            ChangeDirection(random);
         }
-        else if (percent < currentChanceToChange )
+        else if (Percent < CurrentChanceToChange)
         {
-            ChangeDirection();
+            ChangeDirection(random);
         }
     }
 
-    private void ChangeDirection()
+    private void SetPercent(RandomGenerator random)
+    {
+        Percent = random.NextInt(100);
+    }
+
+    private void ChangeDirection(RandomGenerator random)
     {
         Direction *= -1;
 
@@ -95,8 +100,9 @@ public class WaveVariable
         if (_targetValue == 2)
             _targetValue = 0;
 
-        currentChanceToChange = 0;
+        CurrentChanceToChange = 0;
 
+        SetPercent(random);
     }
 }
 

@@ -4,24 +4,33 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Ship : MonoBehaviour
 {
     public float Height;
     public GameObject Water;
+    private Rigidbody2D _rigidbody2D;
+    private float _startPosition;
 
     void Start()
     {
+        _startPosition = transform.position.x;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(GetComponent<PolygonCollider2D>(), Water.GetComponent<PolygonCollider2D>(), true);
     }
 
     void Update()
     {
         Vector3 position = transform.position;
-        position.y = 100;
-        RaycastHit2D hit = Physics2D.Raycast(position, -transform.up, 500f, LayerMask.GetMask("Water"));
+        position.y = 200;
+        position.x = _startPosition;
+        RaycastHit2D hit = Physics2D.Raycast(position, Vector2.down, 500f, LayerMask.GetMask("Water"));
         if (hit)
         {
-            transform.position = hit.point;
+            Vector2 positionToMove = hit.point;
+            positionToMove.x = _startPosition;
+            _rigidbody2D.MovePosition(positionToMove);
+            transform.position = positionToMove;
         }
     }
 }

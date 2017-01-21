@@ -37,8 +37,9 @@ public class Horizon : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate () {
 		HorizonGenerator();
+
+	    float oldDelta = Delta;
 	    Delta += Time.fixedDeltaTime * SpeedWave;
-	    TimeElapsed += Time.fixedDeltaTime;
 
 	    int nbPointToGenerate = 0;
 	    WavePoint pointOnHold = null;
@@ -47,28 +48,26 @@ public class Horizon : MonoBehaviour
 	    {
 	        Delta = Delta - Offset;
 	        nbPointToGenerate++;
-	        pointOnHold = _waveGenerator.GetWavePoint(TimeElapsed);
+	        //pointOnHold = _waveGenerator.GetWavePoint(TimeElapsed);
 
 	    }
 
+	    float deltaTime = Time.fixedDeltaTime / nbPointToGenerate;
+
 	    if (nbPointToGenerate > 0)
 	    {
-            WavePoint lastPoint = HorizonWavePoints.Last();
-
 	        for (int i = 0; i < nbPointToGenerate; i++)
 	        {
                 HorizonWavePoints.RemoveAt(0);
-            }
-
-	        float height = lastPoint.Height;
-
-	        for (int i = 0; i < nbPointToGenerate; i++)
-	        {
-	            height += (pointOnHold.Height - lastPoint.Height)/nbPointToGenerate;    
-	            HorizonWavePoints.Add(new WavePoint(height));
+	            TimeElapsed += deltaTime;
+	            HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
 	        }
-        }
-	}
+	    }
+	    else
+	    {
+	        TimeElapsed += Time.fixedDeltaTime;
+	    }
+    }
 
     public void HorizonGenerator()
     {

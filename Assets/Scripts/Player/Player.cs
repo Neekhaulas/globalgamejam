@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
-    public float Speed;
+    public GravityReferential Referential;
     private Rigidbody2D _rigidbody2D;
-	// Use this for initialization
+    // Use this for initialization
 	void Start ()
 	{
 	    _rigidbody2D = GetComponent<Rigidbody2D>();
+        //_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+	    _rigidbody2D.gravityScale = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Input.GetAxis("Horizontal") != 0)
-	    {
-            _rigidbody2D.velocity = new Vector2(Input.GetAxis("Horizontal") * Speed, _rigidbody2D.velocity.y);
-	    }
-	    else
-	    {
-            _rigidbody2D.velocity = new Vector2(0, _rigidbody2D.velocity.y);
-        }
+        Referential.Attract(transform);
     }
 }

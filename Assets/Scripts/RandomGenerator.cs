@@ -45,5 +45,14 @@ public class RandomGenerator : MonoBehaviour
     {
         return _pseudoRandom.Next(min, max);
     }
+
+    public float NextBinomialFloat(Vector2 range)
+    {
+        float randomFloat = NextFloat();
+
+        randomFloat *= range.y - range.x;
+
+        return randomFloat;
+    }
 }
 

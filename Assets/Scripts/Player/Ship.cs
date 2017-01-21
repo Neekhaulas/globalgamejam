@@ -13,6 +13,7 @@ public class Ship : MonoBehaviour
     public Transform RecoverPoint;
     private Rigidbody2D _rigidbody2D;
     private float _startPosition;
+    public GameObject CharacterGameObject;
 
     void Start()
     {
@@ -51,6 +52,8 @@ public class Ship : MonoBehaviour
 
     public void AddCharacter()
     {
-        Debug.Log("Add Character");
+        Vector3 positionSpawn = transform.position;
+        positionSpawn.y += 2;
+        Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity);
     }
 }

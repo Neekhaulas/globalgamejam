@@ -13,14 +13,14 @@ public class Horizon : MonoBehaviour
     public float Delta;
     public float SpeedWave;
     private WaveGenerator _waveGenerator;
-    private EdgeCollider2D _edgeCollider2D;
+    private PolygonCollider2D _polygonCollider2D;
     public float TimeElapsed;
 
     // Use this for initialization
 	void Start ()
 	{
 	    _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
-	    _edgeCollider2D = GetComponent<EdgeCollider2D>();
+	    _polygonCollider2D = GetComponent<PolygonCollider2D>();
         HorizonWavePoints = new List<WavePoint>();
 
         if (HorizonWavePoints == null)
@@ -91,13 +91,16 @@ public class Horizon : MonoBehaviour
                 triangles.Add(start + 2);
             }
         }
-        
-        Vector2[] edgePoints = new Vector2[NumberPoints];
+
+        Vector2[] edgePoints = new Vector2[NumberPoints+2];
         for (int i = 0; i < NumberPoints; i++)
         {
             edgePoints[i] = new Vector2(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight);
         }
-        _edgeCollider2D.points = edgePoints;
+        edgePoints[NumberPoints] = new Vector2(NumberPoints * Offset, 0);
+        edgePoints[NumberPoints+1] = new Vector2(0, 0);
+        
+        _polygonCollider2D.points = edgePoints;
 
         DestroyImmediate(Mesh);
         Mesh = new Mesh();

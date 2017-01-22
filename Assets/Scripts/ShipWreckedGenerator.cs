@@ -10,6 +10,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     public ShipWrecked ShipWreckedBuffer;
 
+    [SerializeField]
     private float _currentTimeUntilSpawn;
     private RandomGenerator _randomGenerator;
     private Horizon _horizon;
@@ -71,6 +72,7 @@ public class ShipWreckedGenerator : MonoBehaviour
 
     private void Spawn()
     {
+        SetNewTime();
         if (!ShipWreckedBuffer.isActiveAndEnabled)
         {
             ActivateShipWrecked();

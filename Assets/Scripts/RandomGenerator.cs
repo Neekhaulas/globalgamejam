@@ -52,7 +52,7 @@ public class RandomGenerator : MonoBehaviour
 
         randomFloat *= range.y - range.x;
 
-        return randomFloat;
+        return randomFloat + range.x;
     }
 }
 

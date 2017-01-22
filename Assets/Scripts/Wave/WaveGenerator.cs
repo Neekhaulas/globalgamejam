@@ -32,6 +32,6 @@ public class WaveGenerator : MonoBehaviour
     */
     public WavePoint GetWavePoint(float time)
     {
-        return new WavePoint(Mathf.PerlinNoise(time, 0) * Amplitude);
+        return new WavePoint(Mathf.PerlinNoise(time, 0) * Amplitude * Time.time);
     }
 }

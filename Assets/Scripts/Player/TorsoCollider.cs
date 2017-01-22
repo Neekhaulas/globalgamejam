@@ -13,8 +13,11 @@ public class TorsoCollider : MonoBehaviour
 
     public void FallInWater()
     {
-        GetComponent<BoxCollider2D>().isTrigger = true;
-        Character.Disable();
-        GameObject.FindGameObjectWithTag("Ship").GetComponent<Ship>().RemoveCharacter();
+        if (!Character.Disabled)
+        {
+            GetComponent<BoxCollider2D>().isTrigger = true;
+            Character.Disable();
+            GameObject.FindGameObjectWithTag("Ship").GetComponent<Ship>().RemoveCharacter();
+        }
     }
 }

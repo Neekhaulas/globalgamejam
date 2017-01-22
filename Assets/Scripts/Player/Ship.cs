@@ -18,8 +18,8 @@ public class Ship : MonoBehaviour
     public int PeopleCount = 1;
     private Vector2 _centerOfMassStart;
     public float CenterOfMassModified;
-    public float MaxImbalance;
-    public float SpeedImbalance;
+    public float MaxImbalance = 2;
+    public float SpeedImbalance = 1;
 
     void Start()
     {
@@ -62,12 +62,6 @@ public class Ship : MonoBehaviour
         }
         _rigidbody2D.centerOfMass = _centerOfMassStart + new Vector2(CenterOfMassModified, 0);
         _lastHeight = transform.position.y;
-    }
-    
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(_rigidbody2D.worldCenterOfMass, 1);
     }
     
     public void AddCharacter(int indexHead)

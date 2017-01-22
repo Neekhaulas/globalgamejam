@@ -9,15 +9,15 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        DontDestroyOnLoad(FadeAnimator.gameObject);
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(FadeAnimator.gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void StartGame()
     {
-        FadeAnimator.SetBool("FadeIn", true);
+        //FadeAnimator.SetBool("FadeIn", true);
         SceneManager.LoadScene(1, LoadSceneMode.Single);
-        FadeAnimator.SetBool("FadeOut", true);
+        //FadeAnimator.SetBool("FadeOut", true);
     }
 
     public void Exit()

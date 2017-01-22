@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -23,6 +24,9 @@ public class Ship : MonoBehaviour
     public float SpeedImbalance = 1;
 
     public Text CrewText;
+
+    public Text GameOver;
+    public Button RestartButton;
 
     void Start()
     {
@@ -48,12 +52,12 @@ public class Ship : MonoBehaviour
             _rigidbody2D.MovePosition(positionToMove);
             transform.position = positionToMove;
         }
-        if (transform.rotation.z > 0.707 || transform.rotation.z < -0.707)
+        /*if (transform.rotation.z > 0.707 || transform.rotation.z < -0.707)
         {
             Debug.Log("Sink");
             _rigidbody2D.constraints = RigidbodyConstraints2D.None;
             enabled = false;
-        }
+        }*/
 
         if (transform.position.y > _lastHeight)
         {
@@ -71,7 +75,6 @@ public class Ship : MonoBehaviour
     
     public void AddCharacter(int indexHead)
     {
-        Debug.Log("Add Character");
         Vector3 positionSpawn = transform.position;
         positionSpawn.y += 2;
         Character character = Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity).GetComponent<Character>();
@@ -85,7 +88,18 @@ public class Ship : MonoBehaviour
         PeopleCount--;
         if (PeopleCount <= 0)
         {
-            
+            var horizons = FindObjectsOfType<Horizon>();
+            foreach (var horizon in horizons)
+            {
+                horizon.SpeedWave = 0;
+            }
+            GameOver.gameObject.SetActive(true);
+            RestartButton.gameObject.SetActive(true);
         }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 }

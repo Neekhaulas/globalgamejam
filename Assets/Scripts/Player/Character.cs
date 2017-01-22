@@ -56,5 +56,6 @@ public class Character : MonoBehaviour
     {
         Disabled = true;
         GetComponent<BoxCollider2D>().isTrigger = true;
+        transform.rotation = Quaternion.Euler(0, 0, 180);
     }
 }

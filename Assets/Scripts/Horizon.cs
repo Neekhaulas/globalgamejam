@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Horizon : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class Horizon : MonoBehaviour
     private PolygonCollider2D _polygonCollider2D;
     public float TimeElapsed;
     private bool _useCollider;
+
+    public Text distanceText;
+    private int distanceValue;
 
     private ShipWreckedGenerator _shipWreckedGenerator;
 
@@ -72,6 +76,8 @@ public class Horizon : MonoBehaviour
         {
             HorizonWavePoints.Add(_waveGenerator.GetWavePoint(0));
         }
+
+        distanceValue = 0;
     }
 
     // Update is called once per frame
@@ -107,6 +113,13 @@ public class Horizon : MonoBehaviour
         else
         {
             TimeElapsed += Time.fixedDeltaTime;
+        }
+
+        // actualize the distanceText traveled
+        if (distanceText != null)
+        {
+            distanceValue += nbPointToGenerate;
+            distanceText.text = "Distance traveled : " + distanceValue + " m";
         }
 
         // because i'm lazy, actualize the index at each frame

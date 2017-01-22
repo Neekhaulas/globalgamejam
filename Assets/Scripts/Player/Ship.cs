@@ -19,6 +19,7 @@ public class Ship : MonoBehaviour
     private Vector2 _centerOfMassStart;
     public float CenterOfMassModified;
     public float MaxImbalance;
+    public float SpeedImbalance;
 
     void Start()
     {
@@ -53,14 +54,20 @@ public class Ship : MonoBehaviour
 
         if (transform.position.y > _lastHeight)
         {
-            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, MaxImbalance, 0.1f);
+            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, MaxImbalance, SpeedImbalance * Time.deltaTime);
         }
         else
         {
-            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, -MaxImbalance, 0.1f);
+            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, -MaxImbalance, SpeedImbalance * Time.deltaTime);
         }
         _rigidbody2D.centerOfMass = _centerOfMassStart + new Vector2(CenterOfMassModified, 0);
         _lastHeight = transform.position.y;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(_rigidbody2D.worldCenterOfMass, 1);
     }
 
     public void AddCharacter()

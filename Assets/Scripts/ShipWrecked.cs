@@ -4,18 +4,28 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class ShipWrecked : MonoBehaviour
 {
     public float RotateSpeed;
     public float TranslationSpeed;
+
+    public Sprite[] HeadSprites;
 
     public WavePoint TargetPosition;
 
     private bool _isRecovered = false;
     private Transform _target;
     private Renderer _render;
+    private SpriteRenderer _spriteRender;
 
     private ShipWreckedRecover _bufferRecover;
+    private int _headIndex;
+
+    private void Awake()
+    {
+        _spriteRender = GetComponent<SpriteRenderer>();
+    }
 
     private void Start()
     {
@@ -32,6 +42,12 @@ public class ShipWrecked : MonoBehaviour
         {
             gameObject.transform.position = horizon.GetPosition(TargetPosition.IndexInTheList);
         }
+    }
+
+    public void SetHeadIndex(RandomGenerator random)
+    {
+        _headIndex = random.NextInt(0, 3);
+        _spriteRender.sprite = HeadSprites[_headIndex];
     }
 
     public void SetIsRecovered(bool state)
@@ -63,7 +79,7 @@ public class ShipWrecked : MonoBehaviour
             if (transform.position.x <= _target.position.x+0.5f)
             {
                 transform.position = _target.position;
-                _bufferRecover.AddCharacter();
+                _bufferRecover.AddCharacter(_headIndex);
                 _isRecovered = false;
                 gameObject.SetActive(false);
             }

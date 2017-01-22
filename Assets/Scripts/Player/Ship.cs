@@ -63,18 +63,20 @@ public class Ship : MonoBehaviour
         _rigidbody2D.centerOfMass = _centerOfMassStart + new Vector2(CenterOfMassModified, 0);
         _lastHeight = transform.position.y;
     }
-
+    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_rigidbody2D.worldCenterOfMass, 1);
     }
-
-    public void AddCharacter()
+    
+    public void AddCharacter(int indexHead)
     {
         Vector3 positionSpawn = transform.position;
         positionSpawn.y += 2;
-        Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity);
+        Character character = Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity).GetComponent<Character>();
+        character.GenerateCharacter(indexHead);
+
         PeopleCount++;
     }
 

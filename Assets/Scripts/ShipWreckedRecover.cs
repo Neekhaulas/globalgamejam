@@ -26,8 +26,8 @@ public class ShipWreckedRecover : MonoBehaviour
         }
     }
 
-    public void AddCharacter()
+    public void AddCharacter(int headIndex)
     {
-        _ship.AddCharacter();
+        _ship.AddCharacter(headIndex);
     }
 }

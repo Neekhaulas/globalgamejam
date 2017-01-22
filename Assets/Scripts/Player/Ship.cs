@@ -14,6 +14,7 @@ public class Ship : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private float _startPosition;
     public GameObject CharacterGameObject;
+    public int PeopleCount = 1;
 
     void Start()
     {
@@ -50,5 +51,11 @@ public class Ship : MonoBehaviour
         Vector3 positionSpawn = transform.position;
         positionSpawn.y += 2;
         Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity);
+        PeopleCount++;
+    }
+
+    public void RemoveCharacter()
+    {
+        PeopleCount--;
     }
 }

@@ -15,5 +15,6 @@ public class TorsoCollider : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().isTrigger = true;
         Character.Disable();
+        GameObject.FindGameObjectWithTag("Ship").GetComponent<Ship>().RemoveCharacter();
     }
 }

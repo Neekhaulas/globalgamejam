@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(PolygonCollider2D))]
 public class Horizon : MonoBehaviour
 {
     public List<WavePoint> HorizonWavePoints;
@@ -16,6 +15,7 @@ public class Horizon : MonoBehaviour
     private WaveGenerator _waveGenerator;
     private PolygonCollider2D _polygonCollider2D;
     public float TimeElapsed;
+    private bool _useCollider;
 
     private ShipWreckedGenerator _shipWreckedGenerator;
 
@@ -50,6 +50,10 @@ public class Horizon : MonoBehaviour
             GameObject.FindGameObjectWithTag("ShipWreckedGenerator").GetComponent<ShipWreckedGenerator>();
 
         _polygonCollider2D = GetComponent<PolygonCollider2D>();
+        if (_polygonCollider2D != null)
+        {
+            _useCollider = true;
+        }
         HorizonWavePoints = new List<WavePoint>();
 
         if (HorizonWavePoints == null)
@@ -90,7 +94,7 @@ public class Horizon : MonoBehaviour
                 HorizonWavePoints[0].IndexInTheList = -1;
                 HorizonWavePoints.RemoveAt(0);
                 TimeElapsed += deltaTime;
-                HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed));
+                HorizonWavePoints.Add(_waveGenerator.GetWavePoint(TimeElapsed + transform.position.z));
             }
         }
         else
@@ -130,15 +134,19 @@ public class Horizon : MonoBehaviour
             }
         }
 
-        Vector2[] edgePoints = new Vector2[NumberPoints + 2];
-        for (int i = 0; i < NumberPoints; i++)
+        if (_useCollider)
         {
-            edgePoints[i] = new Vector2(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight);
-        }
-        edgePoints[NumberPoints] = new Vector2(NumberPoints * Offset, 0);
-        edgePoints[NumberPoints + 1] = new Vector2(0, 0);
+            Vector2[] edgePoints = new Vector2[NumberPoints + 2];
+            for (int i = 0; i < NumberPoints; i++)
+            {
+                edgePoints[i] = new Vector2(i * Offset - Delta, HorizonWavePoints[i].Height + MinHeight);
+            }
+            edgePoints[NumberPoints] = new Vector2(NumberPoints * Offset, 0);
+            edgePoints[NumberPoints + 1] = new Vector2(0, 0);
 
-        _polygonCollider2D.points = edgePoints;
+            _polygonCollider2D.points = edgePoints;
+        }
+        
 
         DestroyImmediate(Mesh);
         Mesh = new Mesh();

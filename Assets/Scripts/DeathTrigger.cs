@@ -6,6 +6,9 @@ public class DeathTrigger : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
+        if (other.gameObject.tag == "Character")
+        {
+            Destroy(other.gameObject);
+        }
     }
 }

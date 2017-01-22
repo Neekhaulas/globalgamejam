@@ -33,6 +33,7 @@ public class Ship : MonoBehaviour
         {
             Vector2 positionToMove = hit.point;
             positionToMove.x = _startPosition;
+            positionToMove.y += Height;
             _rigidbody2D.MovePosition(positionToMove);
             transform.position = positionToMove;
         }

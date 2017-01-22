@@ -37,7 +37,8 @@ public class ShipWreckedGenerator : MonoBehaviour
         _currentTimeUntilSpawn -= Time.deltaTime;
 
         if (ShipWreckedBuffer.TargetPosition.IndexInTheList == -1
-            && ShipWreckedBuffer.isActiveAndEnabled)
+            && ShipWreckedBuffer.isActiveAndEnabled
+            && !ShipWreckedBuffer.IsRecovered())
         {
             DisableShipWrecked();
         }
@@ -56,10 +57,10 @@ public class ShipWreckedGenerator : MonoBehaviour
     public void TryToActualizeShipWrecked()
     {
         if (ShipWreckedBuffer.isActiveAndEnabled
+            && !ShipWreckedBuffer.IsRecovered()
             && ShipWreckedBuffer.TargetPosition.IndexInTheList != -1)
         {
             ActualizePosition();
-
         }
     }
 

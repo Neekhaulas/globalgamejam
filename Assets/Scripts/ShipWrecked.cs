@@ -13,8 +13,14 @@ public class ShipWrecked : MonoBehaviour
 
     private bool _isRecovered = false;
     private Transform _target;
+    private Renderer _render;
 
     private ShipWreckedRecover _bufferRecover;
+
+    private void Start()
+    {
+        _render = GetComponent<Renderer>();
+    }
 
     public void UpdatePosition(Horizon horizon)
     {
@@ -43,12 +49,16 @@ public class ShipWrecked : MonoBehaviour
     {
         if (_isRecovered)
         {
-            transform.Rotate(new Vector3(0, 0, 1), RotateSpeed * Time.deltaTime);
-
             Vector2 direction = _target.position - transform.position;
-            direction.Normalize(); 
+            direction.Normalize();
 
-            transform.Translate(direction * TranslationSpeed);
+            direction *= TranslationSpeed * Time.deltaTime;
+
+            transform.position += new Vector3(direction.x, direction.y);
+
+            //transform.Translate(direction);
+
+            transform.RotateAround(_render.bounds.center, new Vector3(0, 0, 1), RotateSpeed * Time.deltaTime);
 
             if (transform.position.x < _target.position.x)
             {
@@ -58,5 +68,10 @@ public class ShipWrecked : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    public bool IsRecovered()
+    {
+        return _isRecovered;
     }
 }

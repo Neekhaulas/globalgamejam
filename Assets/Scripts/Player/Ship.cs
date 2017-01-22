@@ -83,5 +83,9 @@ public class Ship : MonoBehaviour
     public void RemoveCharacter()
     {
         PeopleCount--;
+        if (PeopleCount <= 0)
+        {
+            
+        }
     }
 }

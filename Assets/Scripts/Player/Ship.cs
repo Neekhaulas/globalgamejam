@@ -36,7 +36,6 @@ public class Ship : MonoBehaviour
             _rigidbody2D.MovePosition(positionToMove);
             transform.position = positionToMove;
         }
-        Debug.Log(transform.eulerAngles.z);
         if (transform.rotation.z > 0.707 || transform.rotation.z < -0.707)
         {
             Debug.Log("Sink");

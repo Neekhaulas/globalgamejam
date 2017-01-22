@@ -172,4 +172,12 @@ public class Horizon : MonoBehaviour
         return new Vector2(Offset * indexWavePoint - Delta,
             HorizonWavePoints[indexWavePoint].Height + MinHeight);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "TorsoCollider")
+        {
+            other.gameObject.GetComponent<TorsoCollider>().FallInWater();
+        }
+    }
 }

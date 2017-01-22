@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Ship : MonoBehaviour
@@ -20,6 +21,8 @@ public class Ship : MonoBehaviour
     public float CenterOfMassModified;
     public float MaxImbalance;
     public float SpeedImbalance;
+
+    public Text CrewText;
 
     void Start()
     {
@@ -62,6 +65,8 @@ public class Ship : MonoBehaviour
         }
         _rigidbody2D.centerOfMass = _centerOfMassStart + new Vector2(CenterOfMassModified, 0);
         _lastHeight = transform.position.y;
+
+        CrewText.text = "Crew : " + PeopleCount;
     }
     
     void OnDrawGizmos()
@@ -72,6 +77,7 @@ public class Ship : MonoBehaviour
     
     public void AddCharacter(int indexHead)
     {
+        Debug.Log("Add Character");
         Vector3 positionSpawn = transform.position;
         positionSpawn.y += 2;
         Character character = Instantiate(CharacterGameObject, positionSpawn, Quaternion.identity).GetComponent<Character>();

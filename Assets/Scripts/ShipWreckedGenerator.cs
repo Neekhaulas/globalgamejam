@@ -83,6 +83,8 @@ public class ShipWreckedGenerator : MonoBehaviour
     {
         ShipWreckedBuffer.TargetPosition = _horizon.Last;
         ShipWreckedBuffer.gameObject.SetActive(true);
+
+        ShipWreckedBuffer.SetHeadIndex(_randomGenerator);
     }
 
     private void DisableShipWrecked()

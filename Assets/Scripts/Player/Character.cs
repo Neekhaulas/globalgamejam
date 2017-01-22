@@ -19,13 +19,13 @@ public class Character : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
         _ship = GameObject.FindGameObjectWithTag("Ship").GetComponent<Ship>();
-        GenerateCharacter();
+        //GenerateCharacter();
     }
 
-    public void GenerateCharacter()
+    public void GenerateCharacter(int indexHead)
     {
         RandomGenerator randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
-        Sprite head = HeadsSprites[randomGenerator.NextInt(0, HeadsSprites.Length)];
+        Sprite head = HeadsSprites[indexHead];
         Sprite torso = TorsoSprites[randomGenerator.NextInt(0, TorsoSprites.Length)];
         Sprite leg = LegsSprites[randomGenerator.NextInt(0, LegsSprites.Length)];
         Head.sprite = head;

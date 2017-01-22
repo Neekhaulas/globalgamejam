@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class Horizon : MonoBehaviour
     private bool _useCollider;
 
     private ShipWreckedGenerator _shipWreckedGenerator;
+
+    public bool tryToFindTheShipWreckedGenerator = true;
 
     public Vector2 SpawnPosition
     {
@@ -46,8 +49,12 @@ public class Horizon : MonoBehaviour
     {
         _waveGenerator = GameObject.FindGameObjectWithTag("WaveGenerator").GetComponent<WaveGenerator>();
 
-        _shipWreckedGenerator =
-            GameObject.FindGameObjectWithTag("ShipWreckedGenerator").GetComponent<ShipWreckedGenerator>();
+        if(tryToFindTheShipWreckedGenerator)
+        {
+            _shipWreckedGenerator =
+                GameObject.FindGameObjectWithTag("ShipWreckedGenerator").GetComponent<ShipWreckedGenerator>();
+        }
+
 
         _polygonCollider2D = GetComponent<PolygonCollider2D>();
         if (_polygonCollider2D != null)
@@ -108,7 +115,8 @@ public class Horizon : MonoBehaviour
             HorizonWavePoints[i].IndexInTheList = i;
         }
 
-        _shipWreckedGenerator.TryToActualizeShipWrecked();
+        if(_shipWreckedGenerator != null)
+            _shipWreckedGenerator.TryToActualizeShipWrecked();
     }
 
     public void HorizonGenerator()

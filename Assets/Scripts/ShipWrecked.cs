@@ -60,7 +60,7 @@ public class ShipWrecked : MonoBehaviour
 
             transform.RotateAround(_render.bounds.center, new Vector3(0, 0, 1), RotateSpeed * Time.deltaTime);
 
-            if (transform.position.x < _target.position.x)
+            if (transform.position.x <= _target.position.x+0.5f)
             {
                 transform.position = _target.position;
                 _bufferRecover.AddCharacter();

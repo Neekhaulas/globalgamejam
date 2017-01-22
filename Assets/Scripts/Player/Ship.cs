@@ -13,14 +13,20 @@ public class Ship : MonoBehaviour
     public Transform RecoverPoint;
     private Rigidbody2D _rigidbody2D;
     private float _startPosition;
+    private float _lastHeight;
     public GameObject CharacterGameObject;
     public int PeopleCount = 1;
+    private Vector2 _centerOfMassStart;
+    public float CenterOfMassModified;
+    public float MaxImbalance;
 
     void Start()
     {
         _startPosition = transform.position.x;
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(GetComponent<PolygonCollider2D>(), Water.GetComponent<PolygonCollider2D>(), true);
+        _lastHeight = transform.position.y;
+        _centerOfMassStart = _rigidbody2D.centerOfMass;
     }
 
     void Update()
@@ -44,6 +50,17 @@ public class Ship : MonoBehaviour
             _rigidbody2D.constraints = RigidbodyConstraints2D.None;
             enabled = false;
         }
+
+        if (transform.position.y > _lastHeight)
+        {
+            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, MaxImbalance, 0.1f);
+        }
+        else
+        {
+            CenterOfMassModified = Mathf.Lerp(CenterOfMassModified, -MaxImbalance, 0.1f);
+        }
+        _rigidbody2D.centerOfMass = _centerOfMassStart + new Vector2(CenterOfMassModified, 0);
+        _lastHeight = transform.position.y;
     }
 
     public void AddCharacter()

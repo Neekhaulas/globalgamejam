@@ -6,32 +6,20 @@ using UnityEngine;
 public class WaveGenerator : MonoBehaviour
 {
     public float Amplitude;
+    public float TimeElapsed;
 
-   /* void Awake()
+    void Start()
     {
-        
+        TimeElapsed = 0;
     }
 
-	// Use this for initialization
-	void Start () {
-        _randomGenerator = GameObject.FindGameObjectWithTag("RandomGenerator").GetComponent<RandomGenerator>();
-    }
-	    
-	// Update is called once per frame  
-	void Update () {
-		Amplitude.Actualize(Time.deltaTime, _randomGenerator);
-		OrdinaryFrequency.Actualize(Time.deltaTime, _randomGenerator);
-		//Phase.Actualize(Time.deltaTime, _randomGenerator);
-	}
-
-    private float GetHeight(float time)
+    void Update()
     {
-        //return Amplitude.Value * Mathf.Sin(angularFrequency * time + Phase.Value);
-        return Amplitude.Value * Mathf.Sin(angularFrequency * time);
+        TimeElapsed += Time.deltaTime;
     }
-    */
+
     public WavePoint GetWavePoint(float time)
     {
-        return new WavePoint(Mathf.PerlinNoise(time, 0) * Amplitude * Time.time);
+        return new WavePoint(Mathf.PerlinNoise(time, 0) * Amplitude * TimeElapsed);
     }
 }
